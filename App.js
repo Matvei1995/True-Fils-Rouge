@@ -1,12 +1,10 @@
 import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-
-
 import WelcomeScreen from './components/WelcomScreen.js';
 import SignInScreen from './components/SignInScreen.js'
 import SignUpScreen from './components/SignUpScreen.js';
-import "./node_modules/@fontsource/rowdies";
+
 
 
 const Stack = createStackNavigator();
@@ -15,7 +13,7 @@ const Stack = createStackNavigator();
 const App = () => {
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName='Bienvenue'>
+      <Stack.Navigator initialRouteName='TROCANTE'>
         <Stack.Screen name="Bienvenue" component={WelcomeScreen} />
         <Stack.Screen name="SignIn" component={SignInScreen} />
         <Stack.Screen name="SignUp" component={SignUpScreen} />

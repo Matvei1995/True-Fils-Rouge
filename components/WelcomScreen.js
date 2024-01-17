@@ -2,19 +2,19 @@ import "../node_modules/@openfonts/rowdies_all"
 import React ,{Component}from 'react';
 import { StyleSheet,Image, View, Text, Button } from 'react-native';
 
-const TextWithRowdiesFont = ({ text }) => {
-  return (
-    <Text
-      style={{
-        fontFamily: "Rowdies",
-        fontSize: 16,
-        fontWeight: "bold",
-        color: "#000000",
-      }}>
-      {text}
-    </Text>
-  );
-};
+// const TextWithRowdiesFont = ({ text }) => {
+//   return (
+//     <Text
+//       style={{
+//         fontFamily: "rowdies",
+//         fontSize: 16,
+//         fontWeight: "bold",
+//         color: "#000000",
+//       }}>
+//       {text}
+//     </Text>
+//   );
+// };
 class WelcomeScreen extends Component {
   render() {
     return (
@@ -23,16 +23,16 @@ class WelcomeScreen extends Component {
           source={require("../assets/logo.png")}
           resizeMode="contain"
         />
-        <TextWithRowdiesFont>
-      Bienvenue sur Trocante</TextWithRowdiesFont>
-      <Text>L’appli Qui va changer ta manière de troquer 
+        <Text style={styles.text}>
+      Bienvenue sur Trocante</Text>
+      <Text style={styles.text1}>L’appli Qui va changer ta manière de troquer 
         Ecolo et gratuite.</Text>
       
-      <Button
+      <Button style={styles.buttonPush}
         title="Se connecter"
         onPress={() => navigation.navigate('SignIn')}
       />
-      <Button
+      <Button style={styles.buttonPush}
         title="S'inscrire"
         onPress={() => navigation.navigate('SignUp')}
       />
@@ -47,13 +47,25 @@ const styles = StyleSheet.create({
     backgroundColor: "#A0AE88",
     alignItems: "center",
     justifyContent: "center",
+    gap:"10%",
   },
   text: {
-    fontSize: 20,
-    fontFamily: "sans-serif",
+    fontSize: 16,
+    fontFamily: "rowdies",
     fontWeight: "bold",
-    color: "#000000",
+    color: "#FFFFFF",
   },
+  text1:{
+    fontSize: 14,
+    fontFamily:"rowdies",
+    fontWeight:"light",
+    color:"#FFFFFF"
+  },
+  buttonPush:{
+    backgroundColor:"#D9D9D9",
+    
+  }
+
 });
 
 export default WelcomeScreen;
