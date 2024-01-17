@@ -1,6 +1,7 @@
 import "../node_modules/@openfonts/rowdies_all"
 import React ,{Component}from 'react';
-import { StyleSheet,Image, View, Text, Button } from 'react-native';
+import { StyleSheet,Image, View, Text, Button, Pressable } from 'react-native';
+import { StatusBar } from "expo-status-bar";
 
 // const TextWithRowdiesFont = ({ text }) => {
 //   return (
@@ -15,24 +16,26 @@ import { StyleSheet,Image, View, Text, Button } from 'react-native';
 //     </Text>
 //   );
 // };
+const PlaceholderLogo = require("../assets/logo.png");
 class WelcomeScreen extends Component {
   render() {
     return (
       <View style={styles.container}>
-        <Image
-          source={require("../assets/logo.png")}
-          resizeMode="contain"
-        />
-        <Text style={styles.text}>
+        <View style={styles.imageContainer}>  
+        <Image source={PlaceholderLogo} style={styles.image}
+        /></View>
+        
+        <StatusBar style="auto" />
+        <Text style={styles.card1Tittle}>
       Bienvenue sur Trocante</Text>
       <Text style={styles.text1}>L’appli Qui va changer ta manière de troquer 
         Ecolo et gratuite.</Text>
       
-      <Button style={styles.buttonPush}
+      <Pressable style={styles.buttonPush }
         title="Se connecter"
         onPress={() => navigation.navigate('SignIn')}
       />
-      <Button style={styles.buttonPush}
+      <Pressable style={styles.buttonPush }
         title="S'inscrire"
         onPress={() => navigation.navigate('SignUp')}
       />
@@ -49,6 +52,29 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     gap:"10%",
   },
+  imageContainer: {
+    flex: 1,
+    paddingTop: 58,
+  },
+  image:{
+    width:"100px",
+    height:"100%",
+    borderRadius:"30%"
+  },
+  card1Tittle:{
+    //borderBlockColor:"#D9D9D9",
+    display:"flex",
+    justifyContent:"center",
+    backgroundColor:"#D9D9D9",
+    padding:"5%",
+    width:"50%",
+    borderRadius:"20px",
+    fontSize: 16,
+    fontFamily: "rowdies",
+    fontWeight: "bold",
+    color: "#FFFFFF",
+
+  },
   text: {
     fontSize: 16,
     fontFamily: "rowdies",
@@ -56,15 +82,27 @@ const styles = StyleSheet.create({
     color: "#FFFFFF",
   },
   text1:{
+    borderRadius:"15px",
+    paddingTop:"30%",
     fontSize: 14,
     fontFamily:"rowdies",
+    backgroundColor:"#6E745C",
+    width:"300px",
     fontWeight:"light",
     color:"#FFFFFF"
   },
   buttonPush:{
     backgroundColor:"#D9D9D9",
+    //gap:"10%",
+    color:"black",
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: 22,
+    paddingHorizontal: 92,
+    borderRadius: 10,
     
-  }
+    
+  },
 
 });
 
