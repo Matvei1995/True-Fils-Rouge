@@ -3,6 +3,7 @@ import React from 'react';
 import { StyleSheet,Image, View, Text, Pressable } from 'react-native';
 import { StatusBar } from "expo-status-bar";
 import { useNavigation } from '@react-navigation/native'; 
+import { globalStyles } from '../Style/globalFont';
 
 //Contient le logo
 const PlaceholderLogo = require("../assets/logo.png");
@@ -15,7 +16,7 @@ Ecolo et gratuite.`;
 
 
 
-export const WelcomeScreen = () => {
+export function WelcomeScreen () {
   const navigation = useNavigation(); // Accès à l'objet navigation
 
   const onPressConnexion = () => {
@@ -24,27 +25,32 @@ export const WelcomeScreen = () => {
 
   const onPressInscription = () => {
     navigation.navigate('SignUpScreen');
+    
   };
 
+
   return (
-    <View  style={styles.container}>
+    
+    <View  style={[styles.container,styles.text, globalStyles.text]}>
         <View style={styles.image}>  
-        <Image source={PlaceholderLogo} style={styles.image}
-        /></View>
+        <Image source={PlaceholderLogo} style={styles.image}/>
+        </View>
         
         <StatusBar style="auto" />
-        <Text style={styles.card1Tittle}>{FirstTitleApp}
+        <Text style={[styles.text, globalStyles.text,styles.card1Tittle]} >{FirstTitleApp}
         </Text>
+       
         <View style={styles.contentText} >
           <Text style={styles.text1}>{HomeText2}</Text>
-          </View>
+        </View>
       
-      <Pressable style={styles.buttonPush }  onPress={onPressConnexion}>
+      <Pressable style={styles.buttonPush}  onPress={onPressConnexion}>
       <Text>Se connecter</Text> 
       </Pressable>
       <Pressable style={styles.buttonPush } onPress={onPressInscription} >
       <Text>S'inscrire</Text> 
       </Pressable>
+    
       
       </View>
   );
@@ -78,14 +84,15 @@ const styles = StyleSheet.create({
     width:"50%",
     borderRadius:20,
     fontSize: 16,
-    fontFamily: "rowdies",
+    
     fontWeight: "bold",
     color: "#FFFFFF",
 
   },
+
   text: {
     fontSize: 16,
-    fontFamily: "rowdies",
+    fontFamily: 'Rowdies', // For use the font Rowdies
     fontWeight: "bold",
     color: "#FFFFFF",
   },
@@ -103,8 +110,8 @@ const styles = StyleSheet.create({
     textAlign: "center",
     paddingTop: "30%",
     fontSize: 14,
-    fontFamily:"rowdies",
-    fontWeight:"light",
+    fontFamily:"Rowdies",
+    fontWeight:"Bold",
     color:"#FFFFFF"
   },
   buttonPush:{
@@ -115,6 +122,10 @@ const styles = StyleSheet.create({
     paddingVertical: 22,
     paddingHorizontal: 92,
     borderRadius: 10,
+    fontSize: 14,
+    fontFamily:"Rowdies",
+    fontWeight:"Bold",
+    color:"#FFFFFF"
   },
 
 });
