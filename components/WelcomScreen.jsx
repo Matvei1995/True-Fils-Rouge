@@ -1,74 +1,82 @@
-import "../node_modules/@openfonts/rowdies_all"
-import React ,{Component}from 'react';
-import { StyleSheet,Image, View, Text, Button, Pressable } from 'react-native';
+//import "../node_modules/@openfonts/rowdies_all"
+import React from 'react';
+import { StyleSheet,Image, View, Text, Pressable } from 'react-native';
 import { StatusBar } from "expo-status-bar";
+import { useNavigation } from '@react-navigation/native'; 
 
-// const TextWithRowdiesFont = ({ text }) => {
-//   return (
-//     <Text
-//       style={{
-//         fontFamily: "rowdies",
-//         fontSize: 16,
-//         fontWeight: "bold",
-//         color: "#000000",
-//       }}>
-//       {text}
-//     </Text>
-//   );
-// };
+//Contient le logo
 const PlaceholderLogo = require("../assets/logo.png");
-class WelcomeScreen extends Component {
-  render() {
-    return (
-      <View style={styles.container}>
-        <View style={styles.imageContainer}>  
+//Contient le 1er text de bienvenue
+const FirstTitleApp = " Bienvenue sur Trocante";
+const HomeText2 = `L’appli Qui va changer ta manière de troquer 
+Ecolo et gratuite.`;
+
+  
+
+
+
+export const WelcomeScreen = () => {
+  const navigation = useNavigation(); // Accès à l'objet navigation
+
+  const onPressConnexion = () => {
+    navigation.navigate('SignInScreen');
+  };
+
+  const onPressInscription = () => {
+    navigation.navigate('SignUpScreen');
+  };
+
+  return (
+    <View  style={styles.container}>
+        <View style={styles.image}>  
         <Image source={PlaceholderLogo} style={styles.image}
         /></View>
         
         <StatusBar style="auto" />
-        <Text style={styles.card1Tittle}>
-      Bienvenue sur Trocante</Text>
-      <Text style={styles.text1}>L’appli Qui va changer ta manière de troquer 
-        Ecolo et gratuite.</Text>
+        <Text style={styles.card1Tittle}>{FirstTitleApp}
+        </Text>
+        <View style={styles.contentText} >
+          <Text style={styles.text1}>{HomeText2}</Text>
+          </View>
       
-      <Pressable style={styles.buttonPush }
-        title="Se connecter"
-        onPress={() => navigation.navigate('SignIn')}
-      />
-      <Pressable style={styles.buttonPush }
-        title="S'inscrire"
-        onPress={() => navigation.navigate('SignUp')}
-      />
+      <Pressable style={styles.buttonPush }  onPress={onPressConnexion}>
+      <Text>Se connecter</Text> 
+      </Pressable>
+      <Pressable style={styles.buttonPush } onPress={onPressInscription} >
+      <Text>S'inscrire</Text> 
+      </Pressable>
+      
       </View>
-    );
-  }
-}
+  );
+};
+
+
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+   
     backgroundColor: "#A0AE88",
     alignItems: "center",
     justifyContent: "center",
-    gap:"10%",
-  },
-  imageContainer: {
-    flex: 1,
-    paddingTop: 58,
-  },
-  image:{
-    width:"100px",
+    gap:"5%",
+    width:"100%",
     height:"100%",
-    borderRadius:"30%"
+  },
+
+  image:{
+    width:100,
+    height:100,
+    borderRadius:30
   },
   card1Tittle:{
-    //borderBlockColor:"#D9D9D9",
+    borderBlockColor:"#D9D9D9",
     display:"flex",
     justifyContent:"center",
     backgroundColor:"#D9D9D9",
     padding:"5%",
+    textAlign: "center",
     width:"50%",
-    borderRadius:"20px",
+    borderRadius:20,
     fontSize: 16,
     fontFamily: "rowdies",
     fontWeight: "bold",
@@ -81,32 +89,37 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     color: "#FFFFFF",
   },
-  text1:{
+  contentText:{ 
     borderRadius:"15px",
-    paddingTop:"30%",
+    // paddingTop:"30%",
+    // width:"300px",
+    backgroundColor:"#6E745C",
+    
+  },
+  text1:{
+    margin: "2%",
+    height: "225px",
+    alignItems: "center",
+    textAlign: "center",
+    paddingTop: "30%",
     fontSize: 14,
     fontFamily:"rowdies",
-    backgroundColor:"#6E745C",
-    width:"300px",
     fontWeight:"light",
     color:"#FFFFFF"
   },
   buttonPush:{
     backgroundColor:"#D9D9D9",
-    //gap:"10%",
     color:"black",
     alignItems: 'center',
     justifyContent: 'center',
     paddingVertical: 22,
     paddingHorizontal: 92,
     borderRadius: 10,
-    
-    
   },
 
 });
 
-export default WelcomeScreen;
+
 /*
 const TextWithRowdiesFont = ({ text }) => {
     return (
