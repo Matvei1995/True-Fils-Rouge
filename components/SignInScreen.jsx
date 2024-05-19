@@ -20,19 +20,19 @@ export function SignInScreen({ navigation }) {
   };
 
   return (
-    <View style={styles.container}>
-      <TextInput
+    <View style={styles.backgroundStyle}>
+      <TextInput style={styles.input}
         placeholder="Email"
         value={email}
         onChangeText={setEmail}
-        style={styles.input}
+        
       />
       <TextInput
         placeholder="Mot de passe"
         value={password}
         onChangeText={setPassword}
         secureTextEntry
-        style={styles.input}
+        style={[styles.input,]}
       />
       <Button title="Se connecter" onPress={handleSignIn} />
     </View>
@@ -40,14 +40,25 @@ export function SignInScreen({ navigation }) {
 };
 
 const styles = StyleSheet.create({
+  backgroundStyle :{
+    backgroundColor: "#A0AE88",
+    alignItems: "center",
+    justifyContent: "center",
+    gap:"5%",
+    width:"100%",
+    height:"100%",
+  },
   container: {
     flex: 1,
     justifyContent: 'center',
     padding: 20,
   },
+
   input: {
     height: 40,
-    borderColor: 'gray',
+    borderRadius:10,
+    Color: 'gray',
+    backgroundColor:'white',
     borderWidth: 1,
     marginBottom: 20,
     paddingHorizontal: 10,

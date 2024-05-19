@@ -5,7 +5,7 @@ import { SignInScreen } from './components/SignInScreen';
 import { SignUpScreen } from './components/SignUpScreen';
 import { ProfileScreen } from './components/ProfileScreen';
 import { ConfirmationScreen } from './components/ConfirmationScreen';
-import { Header } from './components/Header';
+//import { Header } from './components/Header';
 //Profil Page
 
 import { globalStyles } from './Style/globalFont';
@@ -28,7 +28,7 @@ export default function App() {
         <Stack.Screen name="Confirmation" component={ConfirmationScreen} />
          
       </Stack.Navigator>
-      <Header />
+   
      
     </NavigationContainer>
     

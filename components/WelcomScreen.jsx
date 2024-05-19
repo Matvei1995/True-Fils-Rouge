@@ -50,8 +50,6 @@ export function WelcomeScreen () {
       <Pressable style={styles.buttonPush } onPress={onPressInscription} >
       <Text>S'inscrire</Text> 
       </Pressable>
-    
-      
       </View>
   );
 };
@@ -116,16 +114,16 @@ const styles = StyleSheet.create({
   },
   buttonPush:{
     backgroundColor:"#D9D9D9",
-    color:"black",
+    color:"white",
     alignItems: 'center',
     justifyContent: 'center',
     paddingVertical: 22,
     paddingHorizontal: 92,
     borderRadius: 10,
     fontSize: 14,
-    fontFamily:"Rowdies",
-    fontWeight:"Bold",
-    color:"#FFFFFF"
+    // fontFamily:"Rowdies",
+    // fontWeight:"Bold",
+    //color:"#FFFFFF"
   },
 
 });
