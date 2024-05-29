@@ -32,7 +32,7 @@ export function WelcomeScreen () {
   return (
     
     <View  style={[styles.container,styles.text, globalStyles.text]}>
-        <View style={styles.image}>  
+        <View >  
         <Image source={PlaceholderLogo} style={styles.image}/>
         </View>
         
@@ -68,9 +68,9 @@ const styles = StyleSheet.create({
   },
 
   image:{
-    width:100,
+    width:150,
     height:100,
-    borderRadius:30
+    borderRadius:50
   },
   card1Tittle:{
     borderBlockColor:"#D9D9D9",
@@ -129,48 +129,7 @@ const styles = StyleSheet.create({
 });
 
 
-/*
-const TextWithRowdiesFont = ({ text }) => {
-    return (
-      <Text
-        style={{
-          fontFamily: "Rowdies",
-          fontSize: 20,
-          fontWeight: "bold",
-          color: "#000000",
-        }}>
-        {text}
-      </Text>
-    );
-  };
-const WelcomeScreen = ({ navigation }) => {
-  return (
-   
-    <View >
-        <Image 
-        source={require("../images/logo.png")}
-        resizeMode='contain'/>
-      <TextWithRowdiesFont>
-      Bienvenue sur Trocante</TextWithRowdiesFont>
-      <Text>L’appli Qui va changer ta manière de troquer 
-        Ecolo et gratuite.</Text>
-      
-      <Button
-        title="Se connecter"
-        onPress={() => navigation.navigate('SignIn')}
-      />
-      <Button
-        title="S'inscrire"
-        onPress={() => navigation.navigate('SignUp')}
-      />
-    </View>
 
-
-
-    )}*/
-  
-
-//export default WelcomeScreen;
 
 
 

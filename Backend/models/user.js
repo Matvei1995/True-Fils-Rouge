@@ -18,6 +18,9 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  profileImage: {
+    type: String, // Stocke le chemin de l'image
+  },
 });
 
 const User = mongoose.model('User', userSchema);
