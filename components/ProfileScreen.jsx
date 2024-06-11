@@ -1,41 +1,49 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, Image, StyleSheet, ScrollView, ActivityIndicator, Alert } from 'react-native';
+import { View, Text, Image, StyleSheet, ScrollView, ActivityIndicator, Alert, TouchableOpacity, Pressable } from 'react-native';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import jwtDecode from 'jwt-decode';
+
 import { globalStyles } from '../Style/globalFont';
 import { Ionicons } from '@expo/vector-icons';
 import { EditProfilePicture } from './EditProfilePicture';
-import { ArticlePreview } from './ArticlePreview'; // Assurez-vous d'avoir ce composant
-import { PastTrades } from './PastTrades';    // Assurez-vous d'avoir ce composant
+import { ArticlePreview } from './ArticlePreview';
+import { PastTrades } from './PastTrades';
 
-export function ProfileScreen({ route, navigation }) {
+export function ProfileScreen({navigation }) {
   const [profile, setProfile] = useState(null);
   const [articles, setArticles] = useState([]);
   const [trades, setTrades] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState(null); // Ajoutez un état pour les erreurs
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     const fetchProfileData = async () => {
       setIsLoading(true);
-
+      const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET);
       try {
-        const token = await AsyncStorage.getItem('userToken');
+        //const token = await AsyncStorage.getItem('userToken');
         if (!token) {
-          // Rediriger vers la connexion si aucun token n'est trouvé
           navigation.navigate('SignInScreen');
           return;
+        }else {
+          // Token valide, stockez les informations de l'utilisateur dans req.user
+          req.user = decoded;
+          next();
         }
 
-        const profileResponse = await axios.get('http://localhost:5001/api/users/profile', {
+        const decodedToken = jwtDecode(token,process.env.JWT_SECRET); 
+        const userId = decodedToken.id;
+
+        const profileResponse = await axios.get(`http://localhost:5001/api/users/profile/${userId}`, {
           headers: { Authorization: `Bearer ${token}` },
         });
 
-        const articlesResponse = await axios.get(`http://localhost:5001/api/articles/user/${profileResponse.data._id}`, {
+        const articlesResponse = await axios.get(`http://localhost:5001/api/articles/user/${userId}`, {
           headers: { Authorization: `Bearer ${token}` },
         });
 
-        const tradesResponse = await axios.get(`http://localhost:5001/api/trades/user/${profileResponse.data._id}`, {
+        const tradesResponse = await axios.get(`http://localhost:5001/api/trades/user/${userId}`, {
           headers: { Authorization: `Bearer ${token}` },
         });
 
@@ -43,21 +51,29 @@ export function ProfileScreen({ route, navigation }) {
         setArticles(articlesResponse.data);
         setTrades(tradesResponse.data);
 
-      } catch (err) {
-        console.error('Erreur lors de la récupération des données :', err.response?.data || err.message);
-        setError('Une erreur est survenue lors du chargement de votre profil.'); // Message d'erreur générique
-        // Optionnel: vous pouvez rediriger vers la page de connexion en cas d'erreur d'authentification
-        if(err.response?.status===401) navigation.navigate('SignInScreen');
+      } catch (error) {
+        console.error('Erreur lors de la récupération des données :', error.response?.data || error.message);
+        if (error.response && error.response.status === 401) {
+          setError('Session expirée. Veuillez vous reconnecter.');
+          setTimeout(() => navigation.navigate('SignInScreen'), 1500);
+        } else if (error.response && error.response.status === 404) {
+          setError('Profil non trouvé.');
+        } else {
+          setError('Une erreur est survenue lors du chargement de votre profil.');
+        }
       } finally {
         setIsLoading(false);
       }
     };
 
     fetchProfileData();
-  }, []); 
+  }, []);
+
+  const handleAddArticle = () => {
+    navigation.navigate('CreateArticle');
+  };
 
   const handleEditProfile = () => {
-    setIsEditing(true);
     navigation.navigate('EditProfile', { profile });
   };
 
@@ -72,13 +88,13 @@ export function ProfileScreen({ route, navigation }) {
           style: 'destructive',
           onPress: async () => {
             try {
-              await axios.delete('http://localhost:5001/api/users/profile', {
+              await axios.delete('http://localhost:5001/api/users', {
                 headers: { Authorization: `Bearer ${await AsyncStorage.getItem('userToken')}` },
               });
               navigation.navigate('SignInScreen');
             } catch (error) {
               console.error('Erreur lors de la suppression du profil :', error);
-              Alert.alert('Erreur', "La suppression du profile a échoué");
+              Alert.alert('Erreur', "La suppression du profil a échoué");
             }
           },
         },
@@ -92,46 +108,23 @@ export function ProfileScreen({ route, navigation }) {
       navigation.navigate('SignInScreen');
     } catch (error) {
       console.error('Erreur lors de la déconnexion:', error);
-      // Gestion des erreurs (afficher un message d'erreur à l'utilisateur)
     }
   };
-
 
   if (isLoading) {
     return <ActivityIndicator size="large" color="#0000ff" />;
   }
 
   if (error) {
-    return <Text style={styles.errorText}>{error}</Text>; // Afficher l'erreur
+    return <Text style={styles.errorText}>{error}</Text>;
   }
-
 
   return (
     <View style={styles.container}>
-      {/* Header */}
-      <View style={styles.header}>
-        <Text style={styles.title}>Mon Profil</Text>
-        <View style={styles.icons}>
-          {!isEditing && ( 
-            <TouchableOpacity onPress={handleEditProfile}>
-              <Ionicons name="create-outline" size={24} color="black" />
-            </TouchableOpacity>
-          )}
-          <TouchableOpacity onPress={handleDeleteProfile}>
-            <Ionicons name="trash-outline" size={24} color="red" />
-          </TouchableOpacity>
-        </View>
-      </View>
-
       <ScrollView contentContainerStyle={styles.scrollContent}>
-        {/* Informations du profil */}
         {profile && (
           <View style={styles.profileInfo}>
-            {profile.profileImage ? ( 
-              <Image source={{ uri: profile.profileImage }} style={styles.profilePic} />
-            ) : (
-              <Image source={require('./assets/profile-pic.jpg')} style={styles.profilePic} />
-            )} 
+            <Image source={{ uri: `http://localhost:5001/${profile.profileImage}` }} style={styles.profilePic} />
             <View style={styles.profileDetails}>
               <Text style={styles.name}>{profile.name}</Text>
               <Text style={styles.city}>{profile.city}</Text>
@@ -139,43 +132,153 @@ export function ProfileScreen({ route, navigation }) {
             </View>
           </View>
         )}
-         
 
-        {/* Articles */}
-        {articles.length > 0 ? (
-          <View style={styles.articlesGrid}>
-            {articles.map((article, index) => (
-              <ArticlePreview key={index} article={article} />
-            ))}
-          </View>
-        ) : (
-          <Text>Aucun article disponible</Text>
-        )}
+        <View style={styles.articlesSection}>
+          <Text style={styles.sectionTitle}>Mes Articles</Text>
+          {articles.length > 0 ? (
+            <View style={styles.articlesGrid}>
+              {articles.map((article, index) => (
+                <ArticlePreview key={index} article={article} />
+              ))}
+            </View>
+          ) : (
+            <>
+              <Text style={styles.noArticlesText}>Vous n'avez pas encore ajouté d'articles.</Text>
+              <TouchableOpacity style={styles.addArticleButton} onPress={handleAddArticle}>
+                <Text style={styles.addArticleButtonText}>Ajouter un article</Text>
+              </TouchableOpacity>
+            </>
+          )}
+        </View>
 
-        {/* Trocs passés */}
+        <Text style={styles.sectionTitle}>Trocs passés</Text>
         {trades.length > 0 ? (
           <View>
-            <Text>Trocs passés:</Text>
             {trades.map((trade, index) => (
-              <View key={index}>
-                {/* <Text>{trade.details}</Text> */}
-              </View>
+              <PastTrades key={index} trade={trade} />
             ))}
           </View>
         ) : (
-          <Text>Aucun troc passé disponible</Text>
+          <Text style={styles.noTradesText}>Pas de troc en cours</Text>
         )}
       </ScrollView>
 
-      {/* Barre de navigation inférieure */}
       <View style={styles.bottomNavBar}>
         <Pressable style={styles.iconButton} onPress={() => navigation.navigate('Welcome')}>
           <Ionicons name="home-outline" size={24} color="black" />
         </Pressable>
         <Pressable style={styles.iconButton} onPress={handleLogout}>
-          <Ionicons name="log-out-outline" size={24} color="red" /> {/* Icône de déconnexion */}
+          <Ionicons name="log-out-outline" size={24} color="red" />
         </Pressable>
       </View>
     </View>
   );
-};
+}
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#A0AE88',
+  },
+  scrollContent: {
+    flexGrow: 1,
+    alignItems: 'center',
+    paddingBottom: 80,
+  },
+  profileInfo: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: 'white',
+    padding: 20,
+    borderRadius: 10,
+    marginBottom: 20,
+    width: '90%',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 2,
+    elevation: 2,
+  },
+  profilePic: {
+    width: 80,
+    height: 80,
+    borderRadius: 40,
+    marginRight: 20,
+  },
+  profileDetails: {
+    flex: 1,
+  },
+  name: {
+    fontFamily: 'Rowdies',
+    fontSize: 18,
+    fontWeight: 'bold',
+  },
+  city: {
+    fontFamily: 'Rowdies',
+    fontSize: 16,
+    color: '#6E745C',
+  },
+  email: {
+    fontFamily: 'Rowdies',
+    fontSize: 16,
+    color: '#6E745C',
+  },
+  articlesSection: {
+    width: '90%',
+  },
+  sectionTitle: {
+    fontFamily: 'Rowdies',
+    fontSize: 20,
+    fontWeight: 'bold',
+    marginBottom: 10,
+  },
+  articlesGrid: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'space-between',
+  },
+  noArticlesText: {
+    fontFamily: 'Rowdies',
+    fontSize: 16,
+    color: 'white',
+    marginTop: 10,
+    textAlign: 'center',
+  },
+  addArticleButton: {
+    backgroundColor: '#6E745C',
+    padding: 10,
+    borderRadius: 5,
+    marginTop: 10,
+  },
+  addArticleButtonText: {
+    color: 'white',
+    fontFamily: 'Rowdies',
+    fontWeight: 'bold',
+  },
+  noTradesText: {
+    fontFamily: 'Rowdies',
+    fontSize: 16,
+    color: '#6E745C',
+    textAlign: 'center',
+    marginTop: 10,
+  },
+  bottomNavBar: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    alignItems: 'center',
+    backgroundColor: '#D9D9D9',
+    width: '100%',
+    padding: 15,
+    position: 'absolute',
+    bottom: 0,
+  },
+  iconButton: {
+    padding: 10,
+  },
+  errorText: {
+    color: 'red',
+    fontFamily: 'Rowdies',
+    fontSize: 16,
+    textAlign: 'center',
+    marginTop: 20,
+  },
+});

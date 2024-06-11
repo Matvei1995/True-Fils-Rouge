@@ -45,10 +45,10 @@ export function WelcomeScreen () {
         </View>
       
       <Pressable style={styles.buttonPush}  onPress={onPressConnexion}>
-      <Text>Se connecter</Text> 
+      <Text style={styles.text} >Se connecter</Text> 
       </Pressable>
       <Pressable style={styles.buttonPush } onPress={onPressInscription} >
-      <Text>S'inscrire</Text> 
+      <Text style={styles.text} >S'inscrire</Text> 
       </Pressable>
       </View>
   );

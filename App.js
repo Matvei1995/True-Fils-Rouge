@@ -45,11 +45,11 @@ export default function App() {
   return (
     
     <NavigationContainer screenOptions={{
-      headerShown: false, // Masquer l'en-tête par défaut de la navigation (optionnel)
+      headerShown: false, // Masquer l'en-tête par défaut de la navigation 
       contentStyle: styles.defaultText // Appliquer le style par défaut au contenu des écrans
     }}>
      
-      <Stack.Navigator >
+      <Stack.Navigator style={styles.defaultText} >
         <Stack.Screen name="Welcome" component={WelcomeScreen} />
         <Stack.Screen name="SignInScreen"  component={SignInScreen} />
         <Stack.Screen name="SignUpScreen" component={SignUpScreen} />

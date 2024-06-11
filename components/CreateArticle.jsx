@@ -13,25 +13,25 @@ export function CreateArticle({ navigation }) {
     const [images, setImages] = useState([]); // Un tableau pour stocker les URI des images
   
     const handleChoosePhoto = async () => {
-      let result = await ImagePicker.launchImageLibraryAsync({
-        mediaTypes: ImagePicker.MediaTypeOptions.Images,
-        allowsMultipleSelection: true, // Permettre la sélection de plusieurs images
-        quality: 1,
-      });
-  
-      if (!result.canceled) {
-        setImages(result.assets.map(asset => asset.uri));
-      }
-    };
+        let result = await ImagePicker.launchImageLibraryAsync({
+          mediaTypes: ImagePicker.MediaTypeOptions.Images,
+          allowsMultipleSelection: true,
+          quality: 1,
+        });
+    
+        if (!result.canceled) {
+          setImages(result.assets.map(asset => asset.uri));
+        }
+      };
 
-    const handleSubmit = async () => {
+      const handleSubmit = async () => {
         try {
           const token = await AsyncStorage.getItem('userToken');
           const response = await axios.post('http://localhost:5001/api/articles', {
             title,
             description,
             category,
-            images,
+            images, // Assurez-vous que votre backend attend un tableau d'URIs d'images
           }, {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -40,11 +40,9 @@ export function CreateArticle({ navigation }) {
           });
     
           console.log('Article créé avec succès :', response.data);
-          // Vous pouvez rediriger l'utilisateur vers un autre écran après la création
-          navigation.navigate('ProfileScreen'); // Par exemple, retourner au profil
+          navigation.navigate('ProfileScreen');
         } catch (error) {
           console.error('Erreur lors de la création de l\'article :', error.response?.data || error.message);
-          // Gestion des erreurs (afficher un message d'erreur à l'utilisateur)
         }
       };
   return (

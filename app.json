@@ -22,11 +22,10 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       }
-    },"fonts": {
-      "Rowdies": "./assets/fonts/Rowdies-Regular.ttf"
     },
     "web": {
       "favicon": "./assets/favicon.png"
     }
+    
   }
 }

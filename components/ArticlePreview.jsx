@@ -11,5 +11,8 @@ export const ArticlePreview = ({ article }) => {
 };
 
 const styles = StyleSheet.create({
-  // ... vos styles
+    container: {
+        flex: 1,
+        backgroundColor: '#A0AE88',
+      },
 });

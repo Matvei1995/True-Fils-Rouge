@@ -1,17 +1,37 @@
 const express = require('express');
 const router = express.Router();
-const Article = require('../models/article'); 
+const Article = require('../models/article');
+const authMiddleware = require('../middleware/authMiddleware');
+const multer = require('multer');
 
-router.get('/user/:userId', async (req, res) => {
+// Stockage en mémoire pour les fichiers
+const storage = multer.memoryStorage();
+const upload = multer({ storage: storage });
+
+router.post('/', authMiddleware, upload.array('images'), async (req, res) => {
   try {
-    const userId = req.params.userId;
+    const userId = req.user.id;
+    const imageUrls = []; // Tableau pour stocker les URLs des images
 
-    // Utiliser populate pour récupérer les données de l'utilisateur associées à chaque article
-    const articles = await Article.find({ owner: userId }).populate('owner', 'name'); // Vous pouvez personnaliser les champs à récupérer de l'utilisateur
+    // Parcourir chaque image téléchargée
+    for (const file of req.files) {
+      // Ici, vous devriez stocker l'image dans un service de stockage (cloud) ou localement
+      // et récupérer son URL
+      const imageUrl = await storeImageAndGetUrl(file); // Fonction hypothétique
+      imageUrls.push(imageUrl);
+    }
 
-    res.json(articles);
+    const newArticle = new Article({
+      ...req.body,
+      images: imageUrls,
+      owner: userId
+    });
+    
+    const savedArticle = await newArticle.save();
+    res.status(201).json(savedArticle);
   } catch (error) {
-    console.error('Erreur lors de la récupération des articles :', error);
+    console.error(error.message);
     res.status(500).json({ message: 'Erreur serveur' });
   }
 });
+module.exports = router;
