@@ -2,9 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { View, Text, Image, StyleSheet, ScrollView, ActivityIndicator, Alert, TouchableOpacity, Pressable } from 'react-native';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import jwtDecode from 'jwt-decode';
+import {jwtDecode} from 'jwt-decode';
 
-import { globalStyles } from '../Style/globalFont';
 import { Ionicons } from '@expo/vector-icons';
 import { EditProfilePicture } from './EditProfilePicture';
 import { ArticlePreview } from './ArticlePreview';
@@ -20,33 +19,30 @@ export function ProfileScreen({navigation }) {
   useEffect(() => {
     const fetchProfileData = async () => {
       setIsLoading(true);
-      const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET);
+
       try {
-        //const token = await AsyncStorage.getItem('userToken');
+        const token = await AsyncStorage.getItem('userToken');
         if (!token) {
           navigation.navigate('SignInScreen');
           return;
-        }else {
-          // Token valide, stockez les informations de l'utilisateur dans req.user
-          req.user = decoded;
-          next();
         }
 
-        const decodedToken = jwtDecode(token,process.env.JWT_SECRET); 
+        const decodedToken = jwtDecode(token,process.env); 
         const userId = decodedToken.id;
+        console.log(userId);
 
         const profileResponse = await axios.get(`http://localhost:5001/api/users/profile/${userId}`, {
           headers: { Authorization: `Bearer ${token}` },
         });
 
-        const articlesResponse = await axios.get(`http://localhost:5001/api/articles/user/${userId}`, {
+        const articlesResponse = await axios.get(`http://localhost:5001/api/articles/users/${userId}`, {
           headers: { Authorization: `Bearer ${token}` },
         });
 
-        const tradesResponse = await axios.get(`http://localhost:5001/api/trades/user/${userId}`, {
+        const tradesResponse = await axios.get(`http://localhost:5001/api/trades/users/${userId}`, {
           headers: { Authorization: `Bearer ${token}` },
         });
-
+       
         setProfile(profileResponse.data);
         setArticles(articlesResponse.data);
         setTrades(tradesResponse.data);

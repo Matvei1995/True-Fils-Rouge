@@ -40,7 +40,7 @@ router.post('/register', upload.single('profileImage'), async (req, res) => {
     user.password = await bcrypt.hash(password, salt);
     await user.save();
 
-    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET); //{ expiresIn: '1h' });
+    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '72h' }); 
     res.json({ token });
   } catch (err) {
     console.error(err.message);
@@ -63,8 +63,8 @@ router.post('/login', async (req, res) => {
       return res.status(400).json({ alert: 'Mot de passe incorrect' });
     }
 
-    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, ); 
-    //par sécurité il faut que le token a une expiration mais dans notre cas on ne va pas en mettre pour un question de facilité{ expiresIn: '72h' }
+    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET,{ expiresIn: '72h' } ); 
+    //par sécurité il faut que le token a une expiration mais dans notre cas on ne va en mettre un de 72h{ expiresIn: '72h' }
     res.status(200).json({
       message: 'Login successful',
       user: {

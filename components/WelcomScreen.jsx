@@ -114,7 +114,7 @@ const styles = StyleSheet.create({
   },
   buttonPush:{
     backgroundColor:"#D9D9D9",
-    color:"white",
+    color:"black",
     alignItems: 'center',
     justifyContent: 'center',
     paddingVertical: 22,
