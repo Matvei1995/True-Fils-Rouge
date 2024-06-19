@@ -78,7 +78,7 @@ export function CreateArticle({ navigation }) {
 
         {/* Bouton de soumission */}
         <Pressable style={styles.submitButton} onPress={handleSubmit}>
-          <Text style={styles.submitButtonText}>Créer l'article</Text>
+          <Text style={styles.submitButtxonText}>Créer l'article</Text>
         </Pressable>
       </ScrollView>
     </View>

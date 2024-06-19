@@ -33,5 +33,5 @@ export const EditProfilePicture = ({ profileImage, onImageChange }) => {
 };
 
 const styles = StyleSheet.create({
-  // ... vos styles
+ 
 });

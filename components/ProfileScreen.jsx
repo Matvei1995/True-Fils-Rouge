@@ -51,7 +51,7 @@ export function ProfileScreen({navigation }) {
         console.error('Erreur lors de la récupération des données :', error.response?.data || error.message);
         if (error.response && error.response.status === 401) {
           setError('Session expirée. Veuillez vous reconnecter.');
-          setTimeout(() => navigation.navigate('SignInScreen'), 1500);
+          setTimeout(() => navigation.navigate('SignInScreen'), 6500);
         } else if (error.response && error.response.status === 404) {
           setError('Profil non trouvé.');
         } else {

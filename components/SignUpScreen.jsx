@@ -93,6 +93,8 @@ export const SignUpScreen = ({ navigation }) => {
           style={styles.input}
           value={name}
           onChangeText={setName}
+          data-testid="name-input"
+          
         />
       </View>
       <View style={styles.inputContainer}>
@@ -101,6 +103,8 @@ export const SignUpScreen = ({ navigation }) => {
           style={styles.input}
           value={city}
           onChangeText={setCity}
+          data-testid="city-input"
+         
         />
       </View>
       <View style={styles.inputContainer}>
@@ -114,6 +118,7 @@ export const SignUpScreen = ({ navigation }) => {
           }}
           keyboardType="email-address"
           autoCapitalize="none"
+          data-testid="email-input"
         />
         {emailError ? <Text style={styles.errorText}>{emailError}</Text> : null}
       </View>
@@ -127,6 +132,7 @@ export const SignUpScreen = ({ navigation }) => {
             setPasswordError(validatePassword(text) ? '' : 'Mot de passe incorrect: minimum 8 caractères, une majuscule, une minuscule, un chiffre et un caractère spécial.');
           }}
           secureTextEntry
+           data-testid="password-input"
         />
         {passwordError ? <Text style={styles.errorText}>{passwordError}</Text> : null}
       </View>
